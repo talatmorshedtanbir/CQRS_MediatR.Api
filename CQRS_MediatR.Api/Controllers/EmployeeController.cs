@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using CQRS_MediatR.Api.Models.ResponseDTOs;
+using MediatR;
+using CQRS_MediatR.Api.Queries;
 
 namespace CQRS_MediatR.Api.Controllers
 {
@@ -9,20 +11,20 @@ namespace CQRS_MediatR.Api.Controllers
     [ApiController]
     public class EmployeeController : ControllerBase
     {
-        private readonly IEmployeeService _employeeService;
-        public EmployeeController(IEmployeeService employeeService)
+        private readonly IMediator _mediator;
+        public EmployeeController(IMediator mediator)
         {
-            _employeeService = employeeService;
+            _mediator = mediator;
         }
 
         [HttpGet]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
             try
             {
-                var employees = _employeeService.GetAllEmployees();
+                var result = await _mediator.Send(new GetEmployeeListQuery());
 
-                return Ok(employees);
+                return Ok(result);
             }
             catch (Exception ex)
             {
@@ -30,19 +32,19 @@ namespace CQRS_MediatR.Api.Controllers
             }
         }
 
-        [HttpGet("getbyid")]
-        public IActionResult Get([FromQuery]int id)
-        {
-            try
-            {
-                var employee = _employeeService.GetEmployee(id);
+        //[HttpGet("getbyid")]
+        //public IActionResult Get([FromQuery]int id)
+        //{
+        //    try
+        //    {
+        //        var employee = _employeeService.GetEmployee(id);
 
-                return Ok(employee);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
+        //        return Ok(employee);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
     }
 }

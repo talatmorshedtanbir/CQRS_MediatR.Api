@@ -4,6 +4,7 @@ using CQRS_MediatR.Api.DataAccessLayer.Concrete;
 using CQRS_MediatR.Api.Mappings;
 using CQRS_MediatR.Api.Services.Abstract;
 using CQRS_MediatR.Api.Services.Concrete;
+using MediatR;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,8 +25,10 @@ IMapper mapper = mapperConfig.CreateMapper();
 builder.Services.AddSingleton(mapper);
 builder.Services.AddMvc();
 
-builder.Services.AddTransient<IEmployeeService, EmployeeService>();
-builder.Services.AddTransient<IEmployeeDAL, EmployeeDAL>();
+builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+builder.Services.AddScoped<IEmployeeDAL, EmployeeDAL>();
+
+builder.Services.AddMediatR(typeof(IEmployeeDAL).Assembly);
 
 var app = builder.Build();
 
