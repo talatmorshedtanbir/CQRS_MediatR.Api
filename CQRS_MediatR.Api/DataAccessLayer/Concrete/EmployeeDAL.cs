@@ -60,5 +60,32 @@ namespace CQRS_MediatR.Api.DataAccessLayer.Concrete
 
             return newEmployee.Id;
         }
+
+        public async Task Update(Employee employee)
+        {   
+            var existingEmployee = _employees.Where(x => x.Id.Equals(employee.Id)).FirstOrDefault();
+            if (existingEmployee == null)
+                throw new InvalidOperationException();
+
+            existingEmployee.Id = employee.Id;
+            existingEmployee.Name = employee.Name;
+            existingEmployee.Salary = employee.Salary;
+            existingEmployee.CreatedDate = DateTime.Now;
+
+            _employees.Add(existingEmployee);
+        }
+
+        public async Task Delete(int id)
+        {
+            var employees = _employees.AsQueryable();
+
+            var employee = employees.Where(x => x.Id == id).FirstOrDefault();
+            if(Equals(employee, null))
+            {
+                throw new InvalidOperationException();
+            }
+
+            _employees.Remove(employee);
+        }
     }
 }

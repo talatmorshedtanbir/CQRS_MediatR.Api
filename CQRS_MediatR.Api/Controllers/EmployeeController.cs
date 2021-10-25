@@ -6,6 +6,7 @@ using System.Text.Json;
 using CQRS_MediatR.Api.CQRS.Queries;
 using CQRS_MediatR.Api.Models.Request;
 using CQRS_MediatR.Api.CQRS.Commands;
+using CQRS_MediatR.Api.Models;
 
 namespace CQRS_MediatR.Api.Controllers
 {
@@ -47,13 +48,13 @@ namespace CQRS_MediatR.Api.Controllers
         }
 
         [HttpGet("getbyid")]
-        public IActionResult Get([FromQuery] int id)
+        public async Task<IActionResult> Get([FromQuery] int id)
         {
             try
             {
-                var employee = _mediator.Send(new GetEmployeeByIdQuery(id));
+                var employee = await _mediator.Send(new GetEmployeeByIdQuery(id));
 
-                return Ok(employee.Result);
+                return Ok(employee);
             }
             catch (Exception ex)
             {
@@ -62,13 +63,43 @@ namespace CQRS_MediatR.Api.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody]EmployeeModel employeeModel)
+        public async Task<IActionResult> Post([FromBody]EmployeeModel employeeModel)
         {
             try
             {
-                var id = _mediator.Send(new CreateEmployeeCommand(employeeModel));
+                var id = await _mediator.Send(new CreateEmployeeCommand(employeeModel));
 
-                return Ok(id.Result);
+                return Ok(id);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> Update([FromBody] Employee employee)
+        {
+            try
+            {
+                await _mediator.Send(new UpdateEmployeeCommand(employee));
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> Delete(int id)
+        {
+            try
+            {
+                await _mediator.Send(new DeleteEmployeeCommand(id));
+
+                return Ok();
             }
             catch (Exception ex)
             {

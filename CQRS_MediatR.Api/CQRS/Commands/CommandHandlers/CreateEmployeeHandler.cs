@@ -11,11 +11,11 @@ namespace CQRS_MediatR.Api.CQRS.Commands.CommandHandlers
             _employeeDAL = employeeDAL;
         }
 
-        public Task<int> Handle(CreateEmployeeCommand request, CancellationToken cancellationToken)
+        public async Task<int> Handle(CreateEmployeeCommand request, CancellationToken cancellationToken)
         {
             var id = _employeeDAL.Add(request.EmployeeModel);
 
-            return id;
+            return id.Result;
         }
     }
 }
