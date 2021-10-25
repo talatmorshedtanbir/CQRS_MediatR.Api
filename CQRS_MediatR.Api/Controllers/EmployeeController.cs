@@ -7,6 +7,7 @@ using CQRS_MediatR.Api.CQRS.Queries;
 using CQRS_MediatR.Api.Models.Request;
 using CQRS_MediatR.Api.CQRS.Commands;
 using CQRS_MediatR.Api.Models;
+using CQRS_MediatR.Api.Notifications;
 
 namespace CQRS_MediatR.Api.Controllers
 {
@@ -98,6 +99,7 @@ namespace CQRS_MediatR.Api.Controllers
             try
             {
                 await _mediator.Send(new DeleteEmployeeCommand(id));
+                await _mediator.Publish(new RemoveEmployeeNotification(id));
 
                 return Ok();
             }
