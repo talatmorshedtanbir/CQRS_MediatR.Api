@@ -1,6 +1,6 @@
 ﻿namespace CQRS_MediatR.Api.Models.Request
 {
-    public class EmployeeDto
+    public class EmployeeModel
     {
         public string Name { get; set; }
     }

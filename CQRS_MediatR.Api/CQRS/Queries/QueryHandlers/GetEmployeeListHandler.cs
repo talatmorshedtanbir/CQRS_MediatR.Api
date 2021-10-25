@@ -1,10 +1,9 @@
 ﻿using CQRS_MediatR.Api.DataAccessLayer.Abstract;
 using CQRS_MediatR.Api.Helpers;
 using CQRS_MediatR.Api.Models.Response;
-using CQRS_MediatR.Api.Queries;
 using MediatR;
 
-namespace CQRS_MediatR.Api.Handlers
+namespace CQRS_MediatR.Api.CQRS.Queries.Handlers
 {
     public class GetEmployeeListHandler : IRequestHandler<GetEmployeeListQuery, PaginatedList<EmployeeResponseDto>>
     {

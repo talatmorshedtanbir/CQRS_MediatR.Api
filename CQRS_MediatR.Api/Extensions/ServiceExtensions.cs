@@ -1,7 +1,5 @@
 ﻿using CQRS_MediatR.Api.DataAccessLayer.Abstract;
 using CQRS_MediatR.Api.DataAccessLayer.Concrete;
-using CQRS_MediatR.Api.Services.Abstract;
-using CQRS_MediatR.Api.Services.Concrete;
 using MediatR;
 
 namespace CQRS_MediatR.Api.Extensions
@@ -12,7 +10,6 @@ namespace CQRS_MediatR.Api.Extensions
         {
             services.AddSwaggerGen();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-            services.AddScoped<IEmployeeService, EmployeeService>();
             services.AddMediatR(typeof(IEmployeeDAL).Assembly);
         }
 

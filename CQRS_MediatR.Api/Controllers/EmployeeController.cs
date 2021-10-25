@@ -1,10 +1,11 @@
-﻿using CQRS_MediatR.Api.Services.Abstract;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
-using CQRS_MediatR.Api.Queries;
 using CQRS_MediatR.Api.Models.Request.Filters;
 using System.Text.Json;
+using CQRS_MediatR.Api.CQRS.Queries;
+using CQRS_MediatR.Api.Models.Request;
+using CQRS_MediatR.Api.CQRS.Commands;
 
 namespace CQRS_MediatR.Api.Controllers
 {
@@ -45,19 +46,34 @@ namespace CQRS_MediatR.Api.Controllers
             }
         }
 
-        //[HttpGet("getbyid")]
-        //public IActionResult Get([FromQuery]int id)
-        //{
-        //    try
-        //    {
-        //        var employee = _employeeService.GetEmployee(id);
+        [HttpGet("getbyid")]
+        public IActionResult Get([FromQuery] int id)
+        {
+            try
+            {
+                var employee = _mediator.Send(new GetEmployeeByIdQuery(id));
 
-        //        return Ok(employee);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest(ex.Message);
-        //    }
-        //}
+                return Ok(employee.Result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost]
+        public IActionResult Post([FromBody]EmployeeModel employeeModel)
+        {
+            try
+            {
+                var id = _mediator.Send(new CreateEmployeeCommand(employeeModel));
+
+                return Ok(id.Result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

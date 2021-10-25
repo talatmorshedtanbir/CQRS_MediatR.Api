@@ -45,11 +45,20 @@ namespace CQRS_MediatR.Api.DataAccessLayer.Concrete
         {
             var employees = _employees.AsQueryable();
 
-            var employee = await employees.Where(x => x.Id == id).FirstOrDefaultAsync();
+            var employee = employees.Where(x => x.Id == id).FirstOrDefault();
 
             var result = _mapper.Map<EmployeeResponseDto>(employee);
 
             return result;
+        }
+
+        public async Task<int> Add(EmployeeModel employeeModel)
+        {
+            var newEmployee = _mapper.Map<Employee>(employeeModel);
+            newEmployee.Id = _employees.Max(x => x.Id) + 1;
+            _employees.Add(newEmployee);
+
+            return newEmployee.Id;
         }
     }
 }
