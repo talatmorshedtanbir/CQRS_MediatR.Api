@@ -1,6 +1,6 @@
-﻿namespace CQRS_MediatR.Api.Models.ResponseDTOs
+﻿namespace CQRS_MediatR.Api.Models.Response
 {
-    public class EmployeeDTO
+    public class EmployeeResponseDto
     {
         public string Name { get; set; }
         public int Salary { get; set; }

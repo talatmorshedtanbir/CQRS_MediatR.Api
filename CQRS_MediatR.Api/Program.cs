@@ -1,10 +1,4 @@
-using AutoMapper;
-using CQRS_MediatR.Api.DataAccessLayer.Abstract;
-using CQRS_MediatR.Api.DataAccessLayer.Concrete;
-using CQRS_MediatR.Api.Mappings;
-using CQRS_MediatR.Api.Services.Abstract;
-using CQRS_MediatR.Api.Services.Concrete;
-using MediatR;
+using CQRS_MediatR.Api.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,22 +7,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-// Auto Mapper Configurations
-var mapperConfig = new MapperConfiguration(mc =>
-{
-    mc.AddProfile(new MappingProfile());
-});
-
-IMapper mapper = mapperConfig.CreateMapper();
-builder.Services.AddSingleton(mapper);
 builder.Services.AddMvc();
 
-builder.Services.AddScoped<IEmployeeService, EmployeeService>();
-builder.Services.AddScoped<IEmployeeDAL, EmployeeDAL>();
-
-builder.Services.AddMediatR(typeof(IEmployeeDAL).Assembly);
+builder.Services.ConfigureAppServices();
+builder.Services.ConfigureDataAccess();
 
 var app = builder.Build();
 

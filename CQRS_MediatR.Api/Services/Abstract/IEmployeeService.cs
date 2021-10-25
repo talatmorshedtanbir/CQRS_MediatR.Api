@@ -1,10 +1,10 @@
-﻿using CQRS_MediatR.Api.Models.ResponseDTOs;
+﻿using CQRS_MediatR.Api.Models.Response;
 
 namespace CQRS_MediatR.Api.Services.Abstract
 {
     public interface IEmployeeService
     {
-        public List<EmployeeDTO> GetAllEmployees();
-        public EmployeeDTO GetEmployee(int id);
+        public List<EmployeeResponseDto> GetAllEmployees();
+        public EmployeeResponseDto GetEmployee(int id);
     }
 }

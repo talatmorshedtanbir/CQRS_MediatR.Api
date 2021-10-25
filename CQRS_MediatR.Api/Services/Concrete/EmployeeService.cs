@@ -1,5 +1,5 @@
 ﻿using CQRS_MediatR.Api.DataAccessLayer.Abstract;
-using CQRS_MediatR.Api.Models.ResponseDTOs;
+using CQRS_MediatR.Api.Models.Response;
 using CQRS_MediatR.Api.Services.Abstract;
 
 namespace CQRS_MediatR.Api.Services.Concrete
@@ -12,14 +12,14 @@ namespace CQRS_MediatR.Api.Services.Concrete
             _employeeDAL = employeeDAL;
         }
 
-        public List<EmployeeDTO> GetAllEmployees()
+        public List<EmployeeResponseDto> GetAllEmployees()
         {
-            return _employeeDAL.GetAll();
+            return new List<EmployeeResponseDto>();
         }
 
-        public EmployeeDTO GetEmployee(int id)
+        public EmployeeResponseDto GetEmployee(int id)
         {
-            return _employeeDAL.Get(id);
+            return new EmployeeResponseDto();
         }
     }
 }

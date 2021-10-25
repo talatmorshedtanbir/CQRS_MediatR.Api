@@ -1,9 +1,10 @@
 ﻿using CQRS_MediatR.Api.Services.Abstract;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using CQRS_MediatR.Api.Models.ResponseDTOs;
 using MediatR;
 using CQRS_MediatR.Api.Queries;
+using CQRS_MediatR.Api.Models.Request.Filters;
+using System.Text.Json;
 
 namespace CQRS_MediatR.Api.Controllers
 {
@@ -18,13 +19,25 @@ namespace CQRS_MediatR.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] EmployeeFilterDto employeeFilterDto)
         {
             try
             {
-                var result = await _mediator.Send(new GetEmployeeListQuery());
+                var employees = await _mediator.Send(new GetEmployeeListQuery(employeeFilterDto));
 
-                return Ok(result);
+                var metadata = new
+                {
+                    employees.PageSize,
+                    employees.CurrentPage,
+                    employees.PrevousPage,
+                    employees.NextPage,
+                    employees.TotalPages,
+                    employees.ItemsCount
+                };
+
+                Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(metadata));
+
+                return Ok(employees);
             }
             catch (Exception ex)
             {
